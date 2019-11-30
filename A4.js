@@ -13,7 +13,7 @@ window.onload = function() {
         'Draw Rings': false,
         "No Light": false
     }
-    gui.add(text, 'Planets', {'Sun': 0, 'Mercury': 1, 'Venus': 2, 'Earth': 3, 'Mars': 4, "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8}).onChange(function(value) {
+    var planetDropdown = gui.add(text, 'Planets', {'Sun': 0, 'Mercury': 1, 'Venus': 2, 'Earth': 3, 'Mars': 4, "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8}).onChange(function(value) {
         lookAtPlanet = value
     })
     gui.add(text, 'Draw Rings').onChange(function(value) {
@@ -77,9 +77,14 @@ camera.lookAt(finalScene.position);
 finalScene.add(camera);
 
 // Giving it some controls
-var cameraControl = new THREE.OrbitControls(camera);
+/*var cameraControl = new THREE.OrbitControls(camera);
 cameraControl.damping = 0.2;
-cameraControl.autoRotate = false;
+cameraControl.autoRotate = false;*/
+
+var cameraControl = new THREE.FirstPersonControls(camera, renderer.domElement);
+cameraControl.lookspeed = 0.5
+cameraControl.movementSpeed = 50000;
+
 // ------------------------------
 
 
@@ -546,8 +551,6 @@ function clearRings() {
 var keyboard = new THREEx.KeyboardState();
 var time = 5;
 
-function checkKeyboard() { }
-
 function updateMaterials() {
     cameraPositionUniform.value = camera.position
 
@@ -708,7 +711,7 @@ function updateRings(drawRings) {
 
 var lookAtPlanet = 0;
 function checkKeyboard() {
-    if (keyboard.pressed("Q")) {
+    if (keyboard.pressed("O")) {
         venusGeometry.scale(1.25,1.25,1.25);
         mercuryGeometry.scale(1.25,1.25,1.25);
         earthGeometry.scale(1.25,1.25,1.25);
@@ -723,7 +726,7 @@ function checkKeyboard() {
 
 
 
-    } else if (keyboard.pressed("A")){
+    } else if (keyboard.pressed("P")){
         venusGeometry.scale(0.8,0.8,0.8);
         mercuryGeometry.scale(0.8,0.8,0.8);
         earthGeometry.scale(0.8,0.8,0.8);
@@ -735,15 +738,24 @@ function checkKeyboard() {
         moonGeometry.scale(0.8,0.8,0.8);
         moonRadius = moonRadius*0.8;
         saturnRingsGeometry.scale(0.8,0.8,0.8);
-
     }
-
     /*if (keyboard.pressed("W")){
         timeIncrem += 0.0000001
     } else if (keyboard.pressed("S")){
         timeIncrem -= 0.0000001
     }*/
 }
+
+document.addEventListener("keydown", event => {
+    if (event.key.toLowerCase() == "e" && lookAtPlanet != 8) {
+        lookAtPlanet++
+        planetDropdown.value = 
+    } else if (event.key.toLowerCase() == "q" && lookAtPlanet != 0) {
+        lookAtPlanet--
+    }
+})
+
+var clock = new THREE.Clock(true)
 
 function update() { // Update routine
     earth.frustumCulled = false;
@@ -792,6 +804,8 @@ function update() { // Update routine
         //camera.lookAt(new THREE.Vector3(worldFrame.position.x, worldFrame.position.y, worldFrame.position.z));
     }
     camera.lookAt(camLooking.lerp(target, 0.05))
+
+    cameraControl.update(clock.getDelta())
 
     requestAnimationFrame(update);
     renderer.render(finalScene, camera);
