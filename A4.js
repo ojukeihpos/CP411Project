@@ -4,6 +4,8 @@ var objects = []
 
 var camLooking = new THREE.Vector3(0.0);
 var target;
+var planetDropdown;
+var planets;
 
 window.onload = function() {
     initRings()
@@ -13,7 +15,8 @@ window.onload = function() {
         'Draw Rings': false,
         "No Light": false
     }
-    var planetDropdown = gui.add(text, 'Planets', {'Sun': 0, 'Mercury': 1, 'Venus': 2, 'Earth': 3, 'Mars': 4, "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8}).onChange(function(value) {
+    planets = {'Sun': 0, 'Mercury': 1, 'Venus': 2, 'Earth': 3, 'Mars': 4, "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8}
+    planetDropdown = gui.add(text, 'Planets', planets).onChange(function(value) {
         lookAtPlanet = value
     })
     gui.add(text, 'Draw Rings').onChange(function(value) {
@@ -749,9 +752,20 @@ function checkKeyboard() {
 document.addEventListener("keydown", event => {
     if (event.key.toLowerCase() == "e" && lookAtPlanet != 8) {
         lookAtPlanet++
-        planetDropdown.value = 
+        for (const planet in planets) {
+            if (planets[planet] == lookAtPlanet) {
+                planetDropdown.setValue(planets[planet])
+                return;
+            }
+        }
     } else if (event.key.toLowerCase() == "q" && lookAtPlanet != 0) {
         lookAtPlanet--
+        for (const planet in planets) {
+            if (planets[planet] == lookAtPlanet) {
+                planetDropdown.setValue(planets[planet])
+                return;
+            }
+        }
     }
 })
 
