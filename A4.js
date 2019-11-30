@@ -13,12 +13,37 @@ window.onload = function() {
     var text = {
         Planets: 'planet',
         'Draw Rings': false,
-        "No Light": false
+        "No Light": false,
+        planetDescription: "The Sun",
+        distanceFromSun: "0.00 km",
+        mass: "1.989 × 10^30 kg",
+        surfaceArea: "6.09 × 10^12 km²",
+        orbitalPeriod: "0 days",
+        radius: "695,510 km"
     }
+
     planets = {'Sun': 0, 'Mercury': 1, 'Venus': 2, 'Earth': 3, 'Mars': 4, "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8}
+    planetsDescriptions = ["The Sun", "Mercury", "Venus","Earth", "Mars", "Jupiter","Saturn", "Uranus", "Neptune" ]
+    distanceFromSun = ["0.00 km","57.91 million km","108.2 million km","149.6 million km", "227.9 million km", "778.5 million km", "1.434 billion km", "2.871 billion km", "4.495 billion km"]
+    mass = ["1.989 × 10^30 kg", "3.285 × 10^23 kg","4.867 × 10^24 kg", "5.972 × 10^24 kg","6.39 × 10^23 kg","1.898 × 10^27 kg","5.683 × 10^26 kg", "8.681 × 10^25 kg", "1.024 × 10^26 kg"]
+    surfaceArea = ["6.09 × 10^12 km²", "74.8 million km²"," 460.2 million km²", "510.1 million km²", "144.8 million km²", "61.42 billion km²", "42.7 billion km²", "8.083 billion km²", "7.618 billion km²"]
+    orbitalPeriod = ["0 days", "88 days","225 days", "365 days", "687 days", "12 years", "29 years", "84 years", "165 years"]
+    radius = ["695,510 km","2,439.7 km","6,051.8 km", "6,371 km", "3,389.5 km", "69,911 km", "58,232 km", "25,362 km", "24,622 km"]
+
     planetDropdown = gui.add(text, 'Planets', planets).onChange(function(value) {
         lookAtPlanet = value
+        text.planetDescription = planetsDescriptions[value]
+        text.distanceFromSun = distanceFromSun[value]
+        text.mass = mass[value]
+        text.surfaceArea = surfaceArea[value]
+        text.orbitalPeriod = orbitalPeriod[value]
+        text.radius = radius[value]
+
+        for (var i in gui.__controllers) {
+            gui.__controllers[i].updateDisplay();
+        }
     })
+
     gui.add(text, 'Draw Rings').onChange(function(value) {
         // DRAW RINGS
         console.log("Draw rings: " + value)
@@ -44,7 +69,14 @@ window.onload = function() {
         moonMaterial.uniforms.noLight = {value : value}
         moonMaterial.needsUpdate = true
     })
-    
+
+    gui.add(text, "planetDescription")
+    gui.add(text, "distanceFromSun")
+    gui.add(text, "mass")
+    gui.add(text, "surfaceArea")
+    gui.add(text, "orbitalPeriod")
+    gui.add(text, "radius")
+
 };
 
 // Setup renderer
@@ -154,6 +186,7 @@ var mercuryRotation = {type: 'v3', value: new THREE.Vector3(0,0,0)};
 var mercurySpeed = speed*40;
 var mercuryRotSpeed = 50*rotScale;
 var mercuryAxis = 0.0;
+var mercuryInfo = "This is Mercury"
 
 var venusRadius = 0.723*AU;
 var venusPosition = {type: 'v3', value: new THREE.Vector3(Math.sqrt(venusRadius),0,Math.sqrt(venusRadius))};
@@ -790,6 +823,7 @@ function update() { // Update routine
     updateCoords();
     if (lookAtPlanet == 0) {
         target = new THREE.Vector3(worldFrame.position.x, worldFrame.position.y, worldFrame.position.z)
+
     } else if (lookAtPlanet == 1){
         target = new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z)
         //camera.lookAt(new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z));
