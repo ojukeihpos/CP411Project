@@ -53,21 +53,14 @@ window.onload = function() {
 
     gui.add(text, "No Light").onChange(function(value) {
         mercuryMaterial.uniforms.noLight = {value : value}
-        mercuryMaterial.needsUpdate = true
         venusMaterial.uniforms.noLight = {value : value}
-        venusMaterial.needsUpdate = true
         earthMaterial.uniforms.noLight = {value : value}
-        earthMaterial.needsUpdate = true
         marsMaterial.uniforms.noLight = {value : value}
-        marsMaterial.needsUpdate = true
         jupiterMaterial.uniforms.noLight = {value : value}
-        jupiterMaterial.needsUpdate = true
         saturnMaterial.uniforms.noLight = {value : value}
-        saturnMaterial.needsUpdate = true
         uranusMaterial.uniforms.noLight = {value : value}
-        uranusMaterial.needsUpdate = true
         moonMaterial.uniforms.noLight = {value : value}
-        moonMaterial.needsUpdate = true
+        updateMaterials()
     })
 
     gui.add(text, "planetDescription")
@@ -505,34 +498,27 @@ finalScene.add(skybox);
 var sunGeometry = new THREE.SphereGeometry(150*size, 30, 30);
 var sun = new THREE.Mesh(sunGeometry, sunMaterial);
 finalScene.add(sun)
-objects.push(sun)
 
 var mercuryGeometry = new THREE.SphereGeometry(2*size * planetSize, 30, 30);
 var mercury = new THREE.Mesh(mercuryGeometry, mercuryMaterial);
 finalScene.add(mercury)
-objects.push(mercury)
 
 var venusGeometry = new THREE.SphereGeometry(6*size*planetSize, 30, 30);
 var venus = new THREE.Mesh(venusGeometry, venusMaterial);
 finalScene.add(venus)
-objects.push(venus)
 
 var earthGeometry = new THREE.SphereGeometry(6*size*planetSize, 30, 30);
 var earth = new THREE.Mesh(earthGeometry, earthMaterial);
 finalScene.add(earth)
-objects.push(earth)
 
 
 var marsGeometry = new THREE.SphereGeometry(5*size*planetSize, 30, 30);
 var mars = new THREE.Mesh(marsGeometry, marsMaterial);
 finalScene.add(mars)
-objects.push(mars)
-
 
 var jupiterGeometry = new THREE.SphereGeometry(40*size*planetSize, 30, 30);
 var jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
 finalScene.add(jupiter)
-objects.push(jupiter)
 
 var saturnRingsGeometry = new THREE.RingGeometry(34*size*planetSize+6000, 34*size*planetSize+10000, 30);
 var saturnRings = new THREE.Mesh(saturnRingsGeometry, saturnRingsMaterial);
@@ -541,22 +527,32 @@ finalScene.add(saturnRings);
 var saturnGeometry = new THREE.SphereGeometry(34*size*planetSize, 30, 30);
 var saturn = new THREE.Mesh(saturnGeometry, saturnMaterial);
 finalScene.add(saturn)
-objects.push(saturn)
 
 var uranusGeometry = new THREE.SphereGeometry(15*size*planetSize, 30, 30);
 var uranus = new THREE.Mesh(uranusGeometry, uranusMaterial);
 finalScene.add(uranus)
-objects.push(uranus)
 
 var neptuneGeometry = new THREE.SphereGeometry(15*size*planetSize, 30, 30);
 var neptune = new THREE.Mesh(neptuneGeometry, neptuneMaterial);
 finalScene.add(neptune)
-objects.push(neptune)
 
 var moonGeometry = new THREE.SphereGeometry(2*size*planetSize, 30, 30);
 var moon = new THREE.Mesh(moonGeometry, moonMaterial);
 finalScene.add(moon)
-objects.push(moon)
+
+const starsGeometry = new THREE.Geometry();
+
+    for ( let i = 0; i < 10000; i ++ ) {
+        const star = new THREE.Vector3()
+        star.x = THREE.Math.randFloatSpread(1000000)
+        star.y = THREE.Math.randFloatSpread(1000000)
+        star.z = THREE.Math.randFloatSpread(1000000)
+        starsGeometry.vertices.push( star )
+    }
+
+    const starsMaterial = new THREE.PointsMaterial( { color: 0x888888 } )
+    const starField = new THREE.Points( starsGeometry, starsMaterial )    
+    finalScene.add( starField )
 
 var mercuryRing;
 var venusRing;
@@ -605,7 +601,6 @@ function updateMaterials() {
     uranusMaterial.needsUpdate = true
     neptuneMaterial.needsUpdate = true
     moonMaterial.needsUpdate = true
-
 
     // RINGS
     // earthRingMaterial.needsUpdate = true
@@ -774,11 +769,11 @@ function checkKeyboard() {
         moonRadius = moonRadius*0.8;
         saturnRingsGeometry.scale(0.8,0.8,0.8);
     }
-    /*if (keyboard.pressed("W")){
-        timeIncrem += 0.0000001
-    } else if (keyboard.pressed("S")){
-        timeIncrem -= 0.0000001
-    }*/
+    if (keyboard.pressed("L")){
+        timeIncrem += 0.0000005
+    } else if (keyboard.pressed("K")){
+        timeIncrem -= 0.0000005
+    }
 }
 
 document.addEventListener("keydown", event => {
