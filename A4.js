@@ -186,7 +186,6 @@ var mercuryRotation = {type: 'v3', value: new THREE.Vector3(0,0,0)};
 var mercurySpeed = speed*40;
 var mercuryRotSpeed = 50*rotScale;
 var mercuryAxis = 0.0;
-var mercuryInfo = "This is Mercury"
 
 var venusRadius = 0.723*AU;
 var venusPosition = {type: 'v3', value: new THREE.Vector3(Math.sqrt(venusRadius),0,Math.sqrt(venusRadius))};
@@ -823,7 +822,6 @@ function update() { // Update routine
     updateCoords();
     if (lookAtPlanet == 0) {
         target = new THREE.Vector3(worldFrame.position.x, worldFrame.position.y, worldFrame.position.z)
-
     } else if (lookAtPlanet == 1){
         target = new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z)
         //camera.lookAt(new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z));
