@@ -11,8 +11,9 @@ How to run?
 open A4.html using the Microsoft Edge browser (the model might take a few seconds to load).
 
 Keyboard Controls:
-Arrow keys - move the camera
-Q & E keys - switch between planets
+Arrow keys - move the camera (left, right, forward, backwards)
+R & F - move the camera (up & down)
+Q & E  - switch between planets
 O & P - scale up & down the size of the planets
 L & K - increment & decremnt passage of time
 
