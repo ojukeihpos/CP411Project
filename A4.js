@@ -12,7 +12,7 @@ window.onload = function() {
     var gui = new dat.GUI();
     var text = {
         Planets: 'planet',
-        'Draw Rings': false,
+        'Draw Orbits': false,
         "No Light": false,
         planetDescription: "The Sun",
         distanceFromSun: "0.00 km",
@@ -44,7 +44,7 @@ window.onload = function() {
         }
     })
 
-    gui.add(text, 'Draw Rings').onChange(function(value) {
+    gui.add(text, 'Draw Orbits').onChange(function(value) {
         // DRAW RINGS
         console.log("Draw rings: " + value)
         drawRings = value
