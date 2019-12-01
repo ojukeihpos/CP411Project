@@ -1,8 +1,8 @@
 Name: Rasha Nasri
 ID: 164161160
 
-Name:
-ID:
+Name: Sophie Vo
+ID: 160539730
 
 About the project:
 A solar system simulation built to serve as an educational tool.
@@ -14,7 +14,7 @@ Keyboard Controls:
 Arrow keys - move the camera
 Q & E keys - switch between planets
 O & P - scale up & down the size of the planets
-L & K - increment & decremnt passage of time
+L & K - increment & decrement passage of time
 
 Settings-panel controls:
 
