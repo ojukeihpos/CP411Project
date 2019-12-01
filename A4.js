@@ -45,8 +45,6 @@ window.onload = function() {
     })
 
     gui.add(text, 'Draw Orbits').onChange(function(value) {
-        // DRAW RINGS
-        console.log("Draw rings: " + value)
         drawRings = value
         updateRings(drawRings)
     })
@@ -105,10 +103,6 @@ camera.lookAt(finalScene.position);
 finalScene.add(camera);
 
 // Giving it some controls
-/*var cameraControl = new THREE.OrbitControls(camera);
-cameraControl.damping = 0.2;
-cameraControl.autoRotate = false;*/
-
 var cameraControl = new THREE.FirstPersonControls(camera, renderer.domElement);
 cameraControl.lookspeed = 0.5
 cameraControl.movementSpeed = 50000;
@@ -267,8 +261,6 @@ var earthMaterial = new THREE.ShaderMaterial({
         noLight: false,
     },
 });
-// earthMaterial.scissorTest = false;
-
 
 var mercuryMaterial = new THREE.ShaderMaterial({
     // side: THREE.DoubleSide,
@@ -456,37 +448,6 @@ new THREE.SourceLoader().load(shaderFiles, function(shaders) {
     moonMaterial.fragmentShader = shaders['glsl/moon.fs.glsl']
 })
 
-// LOAD OBJ ROUTINE
-// mode is the scene where the model will be inserted
-function loadOBJ(scene, file, material, scale, xOff, yOff, zOff, xRot, yRot, zRot) {
-    var onProgress = function(query) {
-        if (query.lengthComputable) {
-            var percentComplete = query.loaded / query.total * 100;
-            console.log(Math.round(percentComplete, 2) + '% downloaded');
-        }
-    };
-
-    var onError = function() {
-        console.log('Failed to load ' + file);
-    };
-
-    var loader = new THREE.OBJLoader();
-    loader.load(file, function(object) {
-        object.traverse(function(child) {
-            if (child instanceof THREE.Mesh) {
-                child.material = material;
-            }
-        });
-
-        object.position.set(xOff, yOff, zOff);
-        object.rotation.x = xRot;
-        object.rotation.y = yRot;
-        object.rotation.z = zRot;
-        object.scale.set(scale, scale, scale);
-        scene.add(object)
-    }, onProgress, onError);
-}
-
 // -------------------------------
 // ADD OBJECTS TO THE SCENE
 var size = 50;
@@ -601,20 +562,9 @@ function updateMaterials() {
     uranusMaterial.needsUpdate = true
     neptuneMaterial.needsUpdate = true
     moonMaterial.needsUpdate = true
-
-    // RINGS
-    // earthRingMaterial.needsUpdate = true
-    // mercuryRingMaterial.needsUpdate = true
-    // venusRingMaterial.needsUpdate = true
-    // marsRingMaterial.needsUpdate = true
-    // jupiterRingMaterial.needsUpdate = true
-    // saturnRingMaterial.needsUpdate = true
-    // uranusRingMaterial.needsUpdate = true
-    // neptuneRingMaterial.needsUpdate = true
-
 }
-var timeIncrem = 0.000001;
 
+var timeIncrem = 0.000001;
 function timer() {
     time += timeIncrem;
 }
@@ -676,9 +626,6 @@ function updateCoords(){
     moonPosition.value.z = moonRadius * Math.cos(angle);
     moonRotation.value.y += moonRotSpeed;
     moonRotation.value.x = moonAxis;
-
-    // saturnRings.position.set(new THREE.Vector3(0,0,0));
-
 }
 
 function initRings() {
@@ -821,31 +768,22 @@ function update() { // Update routine
         target = new THREE.Vector3(worldFrame.position.x, worldFrame.position.y, worldFrame.position.z)
     } else if (lookAtPlanet == 1){
         target = new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(mercuryPosition.value.x,mercuryPosition.value.y,mercuryPosition.value.z));
     } else if (lookAtPlanet == 2){
         target = new THREE.Vector3(venusPosition.value.x,venusPosition.value.y,venusPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(venusPosition.value.x,venusPosition.value.y,venusPosition.value.z));
     } else if (lookAtPlanet == 3){
         target = new THREE.Vector3(earthPosition.value.x,earthPosition.value.y,earthPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(earthPosition.value.x,earthPosition.value.y,earthPosition.value.z));
     } else if (lookAtPlanet == 4){
         target = new THREE.Vector3(marsPosition.value.x,marsPosition.value.y,marsPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(marsPosition.value.x,marsPosition.value.y,marsPosition.value.z));
     } else if (lookAtPlanet == 5){
         target = new THREE.Vector3(jupiterPosition.value.x,jupiterPosition.value.y,jupiterPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(jupiterPosition.value.x,jupiterPosition.value.y,jupiterPosition.value.z));
     } else if (lookAtPlanet == 6){
         target = new THREE.Vector3(saturnPosition.value.x,saturnPosition.value.y,saturnPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(saturnPosition.value.x,saturnPosition.value.y,saturnPosition.value.z));
     } else if (lookAtPlanet == 7){
         target = new THREE.Vector3(uranusPosition.value.x,uranusPosition.value.y,uranusPosition.value.z)
-        //camera.lookAt(new THREE.Vector3(uranusPosition.value.x,uranusPosition.value.y,uranusPosition.value.z));
     } else if (lookAtPlanet == 8){
         target = new THREE.Vector3(neptunePosition.value.x,neptunePosition.value.y,neptunePosition.value.z)
-        //camera.lookAt(new THREE.Vector3(neptunePosition.value.x,neptunePosition.value.y,neptunePosition.value.z));
-    } else if (lookAtPlanet == 9){
-        //camera.lookAt(new THREE.Vector3(worldFrame.position.x, worldFrame.position.y, worldFrame.position.z));
     }
+
     camera.lookAt(camLooking.lerp(target, 0.05))
 
     cameraControl.update(clock.getDelta())
