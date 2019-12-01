@@ -777,16 +777,18 @@ function checkKeyboard() {
 }
 
 document.addEventListener("keydown", event => {
-    if (event.key.toLowerCase() == "e" && lookAtPlanet != 8) {
+    if (event.key.toLowerCase() == "e") {
         lookAtPlanet++
+		lookAtPlanet%=9
         for (const planet in planets) {
             if (planets[planet] == lookAtPlanet) {
                 planetDropdown.setValue(planets[planet])
                 return;
             }
         }
-    } else if (event.key.toLowerCase() == "q" && lookAtPlanet != 0) {
+    } else if (event.key.toLowerCase() == "q") {
         lookAtPlanet--
+		lookAtPlanet=(lookAtPlanet+9)%9
         for (const planet in planets) {
             if (planets[planet] == lookAtPlanet) {
                 planetDropdown.setValue(planets[planet])
